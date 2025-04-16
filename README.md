@@ -1,19 +1,6 @@
-# Some helpers for Laravel.
+# Laravel helpers
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/beholdr/laravel-helpers.svg?style=flat-square)](https://packagist.org/packages/beholdr/laravel-helpers)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/beholdr/laravel-helpers/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/beholdr/laravel-helpers/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/beholdr/laravel-helpers/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/beholdr/laravel-helpers/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/beholdr/laravel-helpers.svg?style=flat-square)](https://packagist.org/packages/beholdr/laravel-helpers)
-
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-helpers.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-helpers)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+Some helpers for Laravel projects.
 
 ## Installation
 
@@ -21,13 +8,6 @@ You can install the package via composer:
 
 ```bash
 composer require beholdr/laravel-helpers
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="laravel-helpers-migrations"
-php artisan migrate
 ```
 
 You can publish the config file with:
@@ -40,45 +20,106 @@ This is the contents of the published config file:
 
 ```php
 return [
+    'http_client_log' => true,
 ];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="laravel-helpers-views"
 ```
 
 ## Usage
 
+### Redirect middleware
+
+Simple redirect middleware.
+
+Add an alias in `bootstrap/app.php`:
+
 ```php
-$laravelHelpers = new Beholdr\LaravelHelpers();
-echo $laravelHelpers->echoPhrase('Hello, Beholdr!');
+return Application::configure(basePath: dirname(__DIR__))
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->alias([
+            // other middleware aliases...
+            'redirect' => \Beholdr\LaravelHelpers\Middleware\Redirect::class,
+        ]);
 ```
 
-## Testing
+Example of usage in Folio page:
 
-```bash
-composer test
+```php
+<?php
+
+use function Laravel\Folio\middleware;
+
+// redirect by route name
+middleware(['redirect:route.cards.unistream']);
+
+// OR redirect by URL
+middleware(['redirect:/']);
+
+?>
 ```
 
-## Changelog
+### RemoveTrailingSlash middleware
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+Removes trailing slashes from URLs, making a redirect `/some/url/` → `/some/url`.
 
-## Contributing
+Add in `bootstrap/app.php`:
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+```php
+return Application::configure(basePath: dirname(__DIR__))
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->web(append: [
+            \Beholdr\LaravelHelpers\Middleware\RemoveTrailingSlash::class,
+        ]);
+```
 
-## Security Vulnerabilities
+### UtmFields enum
 
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+Enum `UtmFields` is used for processing of UTM analytics tags.
 
-## Credits
+To get an array of UTM parameters, exluding all other query variables:
 
-- [Alexander Shabunevich](https://github.com/beholdr)
-- [All Contributors](../../contributors)
+```php
+use Beholdr\LaravelHelpers\Enums\UtmFields;
 
-## License
+UtmFields::fromQuery(request()->getQueryString());
+```
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+### HttpClient logger
+
+Automatically logs all HttpClient requests: both success and failure.
+Can be disabled via `http_client_log` config option.
+
+### Telegram log alerts
+
+Custom log channel `TelegramLogChannel` sends alert to your telegram bot upon a log event with a defined level.
+
+Add in your `config/logging.php`:
+
+```php
+'channels' => [
+    // other channels...
+    'telegram' => [
+        'driver' => 'custom',
+        'via' => \Beholdr\LaravelHelpers\Logging\TelegramLogChannel::class,
+        'token' => env('TELEGRAM_BOT_TOKEN'),
+        'channel' => env('TELEGRAM_CHAT_ID'),
+        'level' => env('TELEGRAM_LOG_LEVEL', \Monolog\Level::Error),
+    ],
+]
+```
+
+And then define in your `.env`:
+
+```
+LOG_STACK=daily,telegram
+
+TELEGRAM_BOT_TOKEN=#####
+TELEGRAM_CHAT_ID=#####
+```
+
+Where `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` contains credentials for your [telegram bot](https://core.telegram.org/bots) and [channel ID](https://gist.github.com/mraaroncruz/e76d19f7d61d59419002db54030ebe35).
+
+### AppException
+
+Universal exception class `Beholdr\LaravelHelpers\Exceptions\AppException` to wrap other exceptions and forward to a client.
+
+Can define HTTP `statusCode` (`500` by default) and disable reporting in logs.
