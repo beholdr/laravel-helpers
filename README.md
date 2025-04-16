@@ -80,7 +80,7 @@ To get an array of UTM parameters, exluding all other query variables:
 ```php
 use Beholdr\LaravelHelpers\Enums\UtmFields;
 
-UtmFields::fromQuery(request()->getQueryString());
+UtmFields::fromQuery(request()->getQueryString()); // ['utm_content' => '...', 'utm_source' => '...']
 ```
 
 ### HttpClient logger
