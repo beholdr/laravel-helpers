@@ -1,0 +1,19 @@
+{
+    "name": "laravel-helpers",
+    "image": "mcr.microsoft.com/devcontainers/php:1-8.4-bullseye",
+    "containerEnv": {
+        "XDEBUG_MODE": "off"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "bmewburn.vscode-intelephense-client",
+                "EditorConfig.EditorConfig",
+                "laravel.vscode-laravel",
+                "liamhammett.temphpest",
+                "neilbrayfield.php-docblocker",
+                "shardulm94.trailing-spaces"
+            ]
+        }
+    }
+}
