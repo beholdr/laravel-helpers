@@ -33,4 +33,3 @@ it('parse from empty query', function () {
     expect(UtmFields::fromQuery())->toBe([]);
     expect(UtmFields::fromQuery(''))->toBe([]);
 });
-

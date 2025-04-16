@@ -2,9 +2,9 @@
 
 namespace Beholdr\LaravelHelpers\Tests;
 
+use Beholdr\LaravelHelpers\LaravelHelpersServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Beholdr\LaravelHelpers\LaravelHelpersServiceProvider;
 
 class TestCase extends Orchestra
 {
