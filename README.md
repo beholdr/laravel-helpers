@@ -57,6 +57,20 @@ middleware(['redirect:/']);
 ?>
 ```
 
+### PermanentRedirects middleware
+
+Replaces all `302` redirects with `301` (for SEO purposes).
+
+Add in `bootstrap/app.php`:
+
+```php
+return Application::configure(basePath: dirname(__DIR__))
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->web(append: [
+            \Beholdr\LaravelHelpers\Middleware\PermanentRedirects::class,
+        ]);
+```
+
 ### RemoveTrailingSlash middleware
 
 Removes trailing slashes from URLs, making a redirect `/some/url/` → `/some/url`.
