@@ -71,6 +71,21 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 ```
 
+### RemoveIndex middleware
+
+Removes trailing `/index` from URLs, making a redirect `/url/index` → `/url`.
+Useful for folio pages.
+
+Add in `bootstrap/app.php`:
+
+```php
+return Application::configure(basePath: dirname(__DIR__))
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->web(append: [
+            \Beholdr\LaravelHelpers\Middleware\RemoveIndex::class,
+        ]);
+```
+
 ### RemoveTrailingSlash middleware
 
 Removes trailing slashes from URLs, making a redirect `/some/url/` → `/some/url`.
