@@ -10,6 +10,6 @@ class FromUrl extends BaseUrl
     public function dehydrate($context)
     {
         // skip dehydration
-        return;
+
     }
 }
