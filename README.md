@@ -86,6 +86,29 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 ```
 
+### IgnoreEmbeddableCsrfToken middleware
+
+Ignores CSRF tokens validation for embedded Livewire components, like when you need to load component in iframe.
+
+First, add `Embeddable` attribute to a component class:
+
+```php
+use Beholdr\LaravelHelpers\Attributes\Embeddable;
+
+#[Embeddable]
+class Calculator extends Component {}
+```
+
+Then add in `bootstrap/app.php`:
+
+```php
+return Application::configure(basePath: dirname(__DIR__))
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->web(replace: [
+            \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class => \Beholdr\LaravelHelpers\Middleware\IgnoreEmbeddableCsrfToken::class,
+        ]);
+```
+
 ### RemoveTrailingSlash middleware
 
 Removes trailing slashes from URLs, making a redirect `/some/url/` → `/some/url`.
