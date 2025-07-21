@@ -100,6 +100,21 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 ```
 
+### FromUrl attribute
+
+When you need to load initial value of the Livewire property from the URL, but do not need to update URL on property change:
+
+```php
+use Beholdr\LaravelHelpers\Attributes\FromUrl;
+
+class Calculator extends Component
+{
+    #[FromUrl]
+    public $country;
+}
+```
+
+
 ### UtmFields enum
 
 Enum `UtmFields` is used for processing of UTM analytics tags.
