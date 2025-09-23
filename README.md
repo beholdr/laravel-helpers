@@ -123,6 +123,30 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 ```
 
+### SimpleAuth middleware
+
+Simple basic auth middleware with given credentials for a route or folio page.
+
+Add alias in `bootstrap/app.php`:
+
+```php
+return Application::configure(basePath: dirname(__DIR__))
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->alias([
+            'simple_auth' => \Beholdr\LaravelHelpers\Middleware\SimpleAuth::class,
+        ]);
+```
+
+Then add at the folio page:
+
+```php
+<?php
+use function Laravel\Folio\middleware;
+
+middleware('simple_auth:username,passw0rd');
+?>
+```
+
 ### FromUrl attribute
 
 When you need to load initial value of the Livewire property from the URL, but do not need to update URL on property change:
