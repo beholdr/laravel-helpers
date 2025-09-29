@@ -40,7 +40,7 @@ class HttpClientLog
         // trim big request
         if ($request->hasHeader('content-type') && Str::contains($request->getHeaderLine('content-type'), 'multipart/form-data')) {
             $request = $request->withBody(Utils::streamFor('<<BINARY BODY>>'));
-        } else if ($request->getBody()->getSize() > self::RESPONSE_LIMIT) {
+        } elseif ($request->getBody()->getSize() > self::RESPONSE_LIMIT) {
             $body = Str::limit($request->getBody()->getContents(), self::RESPONSE_LIMIT);
             $request = $request->withBody(Utils::streamFor($body));
         }
@@ -48,7 +48,7 @@ class HttpClientLog
         // trim big response
         if ($response && $response->hasHeader('content-disposition') && Str::contains($response->getHeaderLine('content-disposition'), 'attachment')) {
             $response = $response->withBody(Utils::streamFor('<<BINARY BODY>>'));
-        } else if ($response && $response->getBody()->getSize() > self::RESPONSE_LIMIT) {
+        } elseif ($response && $response->getBody()->getSize() > self::RESPONSE_LIMIT) {
             $body = Str::limit($response->getBody()->getContents(), self::RESPONSE_LIMIT);
             $response = $response->withBody(Utils::streamFor($body));
         }
