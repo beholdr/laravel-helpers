@@ -147,7 +147,7 @@ middleware('simple_auth:username,passw0rd');
 ?>
 ```
 
-### FromUrl attribute
+### FromUrl attribute for Livewire
 
 When you need to load initial value of the Livewire property from the URL, but do not need to update URL on property change:
 
@@ -161,10 +161,9 @@ class Calculator extends Component
 }
 ```
 
-
 ### UtmFields enum
 
-Enum `UtmFields` is used for processing of UTM analytics tags.
+Enum `UtmFields` is used for processing UTM analytics tags.
 
 To get an array of UTM parameters, exluding all other query variables:
 
@@ -180,9 +179,9 @@ Automatically logs all `HttpClient` requests: both success and failure.
 
 Turned on by default, can be disabled by `HTTP_CLIENT_LOG_ENABLED` variable or with `http_client_log` config option.
 
-### Telegram log alerts
+### Telegram log channel
 
-Custom log channel `TelegramLogChannel` sends alert to your telegram bot upon a log event with a defined level.
+Custom log channel `TelegramLogChannel` sending alert to your telegram bot upon a log event with a defined level.
 
 Add in your `config/logging.php`:
 
