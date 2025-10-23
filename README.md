@@ -176,8 +176,9 @@ UtmFields::fromQuery(request()->getQueryString()); // ['utm_content' => '...', '
 
 ### HttpClient logger
 
-Automatically logs all HttpClient requests: both success and failure.
-Can be disabled via `http_client_log` config option.
+Automatically logs all `HttpClient` requests: both success and failure.
+
+Turned on by default, can be disabled by `HTTP_CLIENT_LOG_ENABLED` variable or with `http_client_log` config option.
 
 ### Telegram log alerts
 
