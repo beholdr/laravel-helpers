@@ -57,6 +57,38 @@ middleware(['redirect:/']);
 ?>
 ```
 
+### RedirectUnlessConfig middleware
+
+If the configuration does not contain a given key, redirect to the specified URL or route. Useful for disabling a page without a corresponding feature flag.
+
+Add an alias in `bootstrap/app.php`:
+
+```php
+return Application::configure(basePath: dirname(__DIR__))
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->alias([
+            // other middleware aliases...
+            'redirectUnlessConfig' => \Beholdr\LaravelHelpers\Middleware\RedirectUnlessConfig::class,
+        ]);
+```
+
+Example of usage in Folio page:
+
+```php
+<?php
+
+use function Laravel\Folio\middleware;
+
+// redirect by route name
+middleware(['redirectUnlessConfig:custom.features.feature_xxx_enabled,route.cards.unistream']);
+
+// OR redirect by URL
+middleware(['redirect:custom.features.feature_xxx_enabled,/']);
+
+?>
+```
+
+
 ### PermanentRedirects middleware
 
 Replaces all `302` redirects with `301` (for SEO purposes).
