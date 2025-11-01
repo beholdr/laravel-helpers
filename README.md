@@ -133,7 +133,7 @@ Add alias in `bootstrap/app.php`:
 return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'simple_auth' => \Beholdr\LaravelHelpers\Middleware\SimpleAuth::class,
+            'simpleAuth' => \Beholdr\LaravelHelpers\Middleware\SimpleAuth::class,
         ]);
 ```
 
@@ -143,7 +143,7 @@ Then add at the folio page:
 <?php
 use function Laravel\Folio\middleware;
 
-middleware('simple_auth:username,passw0rd');
+middleware('simpleAuth:username,passw0rd');
 ?>
 ```
 
