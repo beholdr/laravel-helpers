@@ -79,11 +79,11 @@ Example of usage in Folio page:
 
 use function Laravel\Folio\middleware;
 
-// redirect by route name
+// redirect by route name if `custom.features.feature_xxx_enabled` not set
 middleware(['redirectUnlessConfig:custom.features.feature_xxx_enabled,route.cards.unistream']);
 
-// OR redirect by URL
-middleware(['redirect:custom.features.feature_xxx_enabled,/']);
+// OR redirect by URL if `custom.features.feature_xxx_enabled` not set
+middleware(['redirectUnlessConfig:custom.features.feature_xxx_enabled,/']);
 
 ?>
 ```
