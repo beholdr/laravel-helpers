@@ -226,6 +226,7 @@ Add in your `config/logging.php`:
         'token' => env('TELEGRAM_BOT_TOKEN'),
         'channel' => env('TELEGRAM_CHAT_ID'),
         'level' => env('TELEGRAM_LOG_LEVEL', \Monolog\Level::Error),
+        'deduplication_time' => 300, // 5 minutes
     ],
 ]
 ```

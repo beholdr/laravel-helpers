@@ -28,7 +28,7 @@ class TelegramLogChannel
         );
         $telegramHandler->setFormatter($formatter);
 
-        $deduplicationHandler = new DeduplicationHandler($telegramHandler);
+        $deduplicationHandler = new DeduplicationHandler($telegramHandler, time: $config['deduplication_time'] ?? 60);
 
         $logger = new Logger('telegram');
         $logger->pushHandler($deduplicationHandler);
