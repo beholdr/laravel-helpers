@@ -20,7 +20,8 @@ This is the contents of the published config file:
 
 ```php
 return [
-    'http_client_log' => true,
+    'http_client_log' => env('HTTP_CLIENT_LOG_ENABLED', true),
+    'http_client_log_limit' => env('HTTP_CLIENT_LOG_LIMIT', 1024),
 ];
 ```
 
@@ -210,6 +211,8 @@ UtmFields::fromQuery(request()->getQueryString()); // ['utm_content' => '...', '
 Automatically logs all `HttpClient` requests: both success and failure.
 
 Turned on by default, can be disabled by `HTTP_CLIENT_LOG_ENABLED` variable or with `http_client_log` config option.
+
+Also you can set limit for truncation of the request/response body with `HTTP_CLIENT_LOG_LIMIT` variable or with `http_client_log_limit` config option.
 
 ### Telegram log channel
 
