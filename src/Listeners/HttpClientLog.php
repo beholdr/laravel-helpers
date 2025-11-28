@@ -15,8 +15,6 @@ class HttpClientLog
 {
     protected const TEMPLATE = '>>>\n{request}\n<<<\n{response}';
 
-    protected const RESPONSE_LIMIT = 1024;
-
     public function handle(ConnectionFailed|ResponseReceived $event)
     {
         if ($event instanceof ConnectionFailed) {
@@ -37,19 +35,21 @@ class HttpClientLog
 
     private static function format(RequestInterface $request, ?ResponseInterface $response = null)
     {
+        $limit = config('helpers.http_client_log_limit');
+
         // trim big request
         if ($request->hasHeader('content-type') && Str::contains($request->getHeaderLine('content-type'), 'multipart/form-data')) {
             $request = $request->withBody(Utils::streamFor('<<BINARY BODY>>'));
-        } elseif ($request->getBody()->getSize() > self::RESPONSE_LIMIT) {
-            $body = Str::limit($request->getBody()->getContents(), self::RESPONSE_LIMIT);
+        } elseif ($request->getBody()->getSize() > $limit) {
+            $body = Str::limit($request->getBody()->getContents(), $limit);
             $request = $request->withBody(Utils::streamFor($body));
         }
 
         // trim big response
         if ($response && $response->hasHeader('content-disposition') && Str::contains($response->getHeaderLine('content-disposition'), 'attachment')) {
             $response = $response->withBody(Utils::streamFor('<<BINARY BODY>>'));
-        } elseif ($response && $response->getBody()->getSize() > self::RESPONSE_LIMIT) {
-            $body = Str::limit($response->getBody()->getContents(), self::RESPONSE_LIMIT);
+        } elseif ($response && $response->getBody()->getSize() > $limit) {
+            $body = Str::limit($response->getBody()->getContents(), $limit);
             $response = $response->withBody(Utils::streamFor($body));
         }
 
