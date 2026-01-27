@@ -24,8 +24,8 @@ class HttpClientLog
         }
 
         $context = [
-            'log' => $this->format($event->request->toPsrRequest(), $event->response->toPsrResponse()),
-            'time' => $event->response->transferStats->getTransferTime(),
+            'http_request_log' => $this->format($event->request->toPsrRequest(), $event->response->toPsrResponse()),
+            'http_request_duration' => $event->response->transferStats->getTransferTime(),
         ];
 
         $event->response->successful()
