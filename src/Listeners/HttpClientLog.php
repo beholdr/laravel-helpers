@@ -18,7 +18,7 @@ class HttpClientLog
     public function handle(ConnectionFailed|ResponseReceived $event)
     {
         if ($event instanceof ConnectionFailed) {
-            Log::warning('[HttpClient] ConnectionFailed', ['info' => $this->format($event->request->toPsrRequest())]);
+            Log::warning('[HttpClient] ConnectionFailed', ['http_request_log' => $this->format($event->request->toPsrRequest())]);
 
             return;
         }
