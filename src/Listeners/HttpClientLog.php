@@ -18,14 +18,14 @@ class HttpClientLog
     public function handle(ConnectionFailed|ResponseReceived $event)
     {
         if ($event instanceof ConnectionFailed) {
-            Log::warning('[HttpClient] ConnectionFailed', ['http_request_log' => $this->format($event->request->toPsrRequest())]);
+            Log::warning('[HttpClient] ConnectionFailed', ['http_client_request' => $this->format($event->request->toPsrRequest())]);
 
             return;
         }
 
         $context = [
-            'http_request_log' => $this->format($event->request->toPsrRequest(), $event->response->toPsrResponse()),
-            'http_request_duration' => $event->response->transferStats->getTransferTime(),
+            'http_client_request' => $this->format($event->request->toPsrRequest(), $event->response->toPsrResponse()),
+            'http_client_request_duration' => $event->response->transferStats->getTransferTime(),
         ];
 
         $event->response->successful()
