@@ -18,7 +18,7 @@ class HttpClientLog
     public function handle(ConnectionFailed|ResponseReceived $event)
     {
         if ($event instanceof ConnectionFailed) {
-            Log::warning('[HttpClient] ConnectionFailed', ['http_client_request' => $this->format($event->request->toPsrRequest())]);
+            Log::debug('[HttpClient] ConnectionFailed', ['http_client_request' => $this->format($event->request->toPsrRequest())]);
 
             return;
         }
@@ -30,7 +30,7 @@ class HttpClientLog
 
         $event->response->successful()
             ? Log::debug('[HttpClient] Success', $context)
-            : Log::warning('[HttpClient] Error', $context);
+            : Log::debug('[HttpClient] Error', $context);
     }
 
     private static function format(RequestInterface $request, ?ResponseInterface $response = null)
