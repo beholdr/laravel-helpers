@@ -145,6 +145,7 @@ return Application::configure(basePath: dirname(__DIR__))
 ### RemoveTrailingSlash middleware
 
 Removes trailing slashes from URLs, making a redirect `/some/url/` → `/some/url`.
+Also removes duplicate slashes inside URLs like: `///some///url` → `/some/url`.
 
 Add in `bootstrap/app.php`:
 
