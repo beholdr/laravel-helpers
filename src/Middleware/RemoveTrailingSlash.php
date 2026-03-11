@@ -19,13 +19,17 @@ class RemoveTrailingSlash
     public function handle(Request $request, Closure $next): Response
     {
         $url = Str::of($request->getRequestUri());
+        $uri = $request->uri();
 
-        if ($url->endsWith('/') || $url->contains('/?') || $url->contains('//')) {
-            $uri = $request->uri();
-            $path = empty((string) $uri->query())
-                ? $uri->path()
-                : $uri->path().'?'.$uri->query();
-            $path = '/'.Str::deduplicate($path, '/');
+        $endsWithSlash = ($uri->path() !== '/') && $url->endsWith('/');
+        $endsWithSlashQuery = ($uri->path() !== '/') && $url->contains('/?');
+
+        if ($endsWithSlash || $endsWithSlashQuery || $url->contains('//')) {
+            $path = Str::deduplicate($uri->path(), '/');
+            if ((string) $uri->query() !== '') {
+                $path .= '?'.$uri->query();
+            }
+            $path = Str::start($path, '/');
 
             return Redirect::to($path, 301);
         }
