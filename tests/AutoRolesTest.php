@@ -42,6 +42,23 @@ it('assigns multiple auto roles when model is created', function () {
     expect($user->hasAllRoles(['client', 'editor']))->toBeTrue();
 });
 
+it('assigns an auto role from backed enum when model is created', function () {
+    Role::create(['name' => 'client']);
+
+    $user = EnumAutoRoleUser::create(['name' => 'Test User']);
+
+    expect($user->hasRole('client'))->toBeTrue();
+});
+
+it('assigns multiple auto roles from backed enums when model is created', function () {
+    Role::create(['name' => 'client']);
+    Role::create(['name' => 'editor']);
+
+    $user = MultipleEnumAutoRolesUser::create(['name' => 'Test User']);
+
+    expect($user->hasAllRoles(['client', 'editor']))->toBeTrue();
+});
+
 it('does not assign roles without AutoRoles attribute', function () {
     Role::create(['name' => 'client']);
 
@@ -81,6 +98,32 @@ class MultipleAutoRolesUser extends Authenticatable
     protected $table = 'auto_role_users';
 }
 
+#[AutoRoles(AutoRole::Client)]
+class EnumAutoRoleUser extends Authenticatable
+{
+    use HasAutoRoles;
+    use HasRoles;
+
+    protected $guard_name = 'web';
+
+    protected $guarded = [];
+
+    protected $table = 'auto_role_users';
+}
+
+#[AutoRoles([AutoRole::Client, AutoRole::Editor])]
+class MultipleEnumAutoRolesUser extends Authenticatable
+{
+    use HasAutoRoles;
+    use HasRoles;
+
+    protected $guard_name = 'web';
+
+    protected $guarded = [];
+
+    protected $table = 'auto_role_users';
+}
+
 class UserWithoutAutoRoles extends Authenticatable
 {
     use HasAutoRoles;
@@ -101,4 +144,10 @@ class UserWithoutSpatieHasRoles extends Model
     protected $guarded = [];
 
     protected $table = 'auto_role_users';
+}
+
+enum AutoRole: string
+{
+    case Client = 'client';
+    case Editor = 'editor';
 }

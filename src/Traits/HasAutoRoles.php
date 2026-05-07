@@ -36,7 +36,7 @@ trait HasAutoRoles
     }
 
     /**
-     * @return array<int, string>
+     * @return array<int, string|\BackedEnum>
      */
     protected static function autoRoles(): array
     {

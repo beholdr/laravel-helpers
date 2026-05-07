@@ -2,18 +2,20 @@
 
 namespace Beholdr\LaravelHelpers\Attributes;
 
+use BackedEnum;
+
 #[\Attribute(\Attribute::TARGET_CLASS)]
 class AutoRoles
 {
     /**
-     * @param  string|array<int, string>  $roles
+     * @param  string|BackedEnum|array<int, string|BackedEnum>  $roles
      */
     public function __construct(
-        public readonly string|array $roles,
+        public readonly string|BackedEnum|array $roles,
     ) {}
 
     /**
-     * @return array<int, string>
+     * @return array<int, string|BackedEnum>
      */
     public function roles(): array
     {

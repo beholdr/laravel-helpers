@@ -224,6 +224,14 @@ class User extends Authenticatable
 }
 ```
 
+It also supports enums:
+
+```php
+use App\Enums\UserRole;
+
+#[AutoRoles(UserRole::MEMBER)]
+```
+
 ### HttpClient logger
 
 Automatically logs all `HttpClient` requests: both success and failure.
