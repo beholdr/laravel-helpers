@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 // src https://jessarcher.com/articles/httpable-exceptions-in-laravel/
 class AppException extends Exception implements HttpExceptionInterface
 {
+    /** @param string $message */
     public function __construct(
         protected $message,
         protected $errorCode = null,

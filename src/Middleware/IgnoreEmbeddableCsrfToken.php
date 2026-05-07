@@ -5,9 +5,9 @@ namespace Beholdr\LaravelHelpers\Middleware;
 use Beholdr\LaravelHelpers\Attributes\Embeddable;
 use Closure;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Http\Request;
 use Livewire\Exceptions\ComponentNotFoundException;
 use Livewire\LivewireManager;
-use Livewire\Mechanisms\ComponentRegistry;
 use ReflectionClass;
 
 // Based on https://github.com/wire-elements/wire-extender/blob/main/src/Http/Middlewares/IgnoreForWireExtender.php
@@ -34,14 +34,14 @@ class IgnoreEmbeddableCsrfToken extends VerifyCsrfToken
         return $next($request);
     }
 
-    private function isLivewireUpdateRequest($request): bool
+    private function isLivewireUpdateRequest(Request $request): bool
     {
         return $request->method() === 'POST' &&
             app(LivewireManager::class)->getUpdateUri() === $request->getRequestUri() &&
             $request->hasHeader('X-Livewire');
     }
 
-    private function isEmbeddable($component): bool
+    private function isEmbeddable(mixed $component): bool
     {
         try {
             $reflectionClass = new ReflectionClass($this->getClass($component));
@@ -53,10 +53,12 @@ class IgnoreEmbeddableCsrfToken extends VerifyCsrfToken
         }
     }
 
-    private function getClass($component)
+    private function getClass(mixed $component)
     {
-        if (app()->has(ComponentRegistry::class)) {
-            return app(ComponentRegistry::class)->new($component);
+        $componentRegistryClass = 'Livewire\\Mechanisms\\ComponentRegistry';
+
+        if (class_exists($componentRegistryClass) && app()->has($componentRegistryClass)) {
+            return app($componentRegistryClass)->new($component);
         }
 
         $className = app('livewire.finder')->resolveClassComponentClassName($component);
