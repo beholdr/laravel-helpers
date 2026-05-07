@@ -1,9 +1,16 @@
 {
     "name": "laravel-helpers",
     "image": "mcr.microsoft.com/devcontainers/php:1-8.4-bullseye",
+    "postCreateCommand": "[ -f /opencode/auth.json ] && mkdir -p ~/.local/share/opencode/ && cp -n /opencode/auth.json ~/.local/share/opencode/auth.json",
     "containerEnv": {
         "XDEBUG_MODE": "off"
     },
+    "features": {
+        "ghcr.io/devcontainers-extra/features/opencode:1": {}
+    },
+    "mounts": [
+        "source=./.devcontainer/opencode,target=/opencode,type=bind,consistency=cached"
+    ],
     "customizations": {
         "vscode": {
             "extensions": [
@@ -12,7 +19,8 @@
                 "laravel.vscode-laravel",
                 "liamhammett.temphpest",
                 "neilbrayfield.php-docblocker",
-                "shardulm94.trailing-spaces"
+                "shardulm94.trailing-spaces",
+                "sst-dev.opencode"
             ]
         }
     }
