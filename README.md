@@ -207,6 +207,23 @@ use Beholdr\LaravelHelpers\Enums\UtmFields;
 UtmFields::fromQuery(request()->getQueryString()); // ['utm_content' => '...', 'utm_source' => '...']
 ```
 
+### AutoRoles trait
+
+Auto assign roles for your model on creation. Works with `spatie/laravel-permission`:
+
+```php
+use Beholdr\LaravelHelpers\Attributes\AutoRoles;
+use Beholdr\LaravelHelpers\Traits\HasAutoRoles;
+use Spatie\Permission\Traits\HasRoles;
+
+#[AutoRoles(['member', 'editor'])]
+class User extends Authenticatable
+{
+    use HasRoles;
+    use HasAutoRoles;
+}
+```
+
 ### HttpClient logger
 
 Automatically logs all `HttpClient` requests: both success and failure.
