@@ -240,6 +240,33 @@ Turned on by default, can be disabled by `HTTP_CLIENT_LOG_ENABLED` variable or w
 
 Also you can set limit for truncation of the request/response body with `HTTP_CLIENT_LOG_LIMIT` variable or with `http_client_log_limit` config option.
 
+### Ntfy log channel
+
+Custom log channel `NtfyLogChannel` sending alert to your [ntfy.sh](https://ntfy.sh) channel upon a log event with a defined level.
+
+Add in your `config/logging.php`:
+
+```php
+'channels' => [
+    // other channels...
+    'ntfy' => [
+        'driver' => 'custom',
+        'via' => \Beholdr\LaravelHelpers\Logging\NtfyLogChannel::class,
+        'server' => env('NTFY_SERVER', 'https://ntfy.sh'),
+        'topic' => env('NTFY_TOPIC'),
+        'level' => env('NTFY_LOG_LEVEL', \Monolog\Level::Error),
+    ],
+]
+```
+
+And then define in your `.env`:
+
+```
+LOG_STACK=daily,ntfy
+
+NTFY_TOPIC=#####
+```
+
 ### Telegram log channel
 
 Custom log channel `TelegramLogChannel` sending alert to your telegram bot upon a log event with a defined level.
