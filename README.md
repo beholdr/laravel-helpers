@@ -255,6 +255,7 @@ Add in your `config/logging.php`:
         'server' => env('NTFY_SERVER', 'https://ntfy.sh'),
         'topic' => env('NTFY_TOPIC'),
         'level' => env('NTFY_LOG_LEVEL', \Monolog\Level::Error),
+        'deduplication_time' => 300, // 5 minutes
     ],
 ]
 ```

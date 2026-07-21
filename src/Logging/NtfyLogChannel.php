@@ -3,6 +3,7 @@
 namespace Beholdr\LaravelHelpers\Logging;
 
 use Monolog\Handler\AbstractProcessingHandler;
+use Monolog\Handler\DeduplicationHandler;
 use Monolog\Level;
 use Monolog\Logger;
 use Monolog\LogRecord;
@@ -11,10 +12,9 @@ final class NtfyLogChannel
 {
     public function __invoke(array $config): Logger
     {
-        $logger = new Logger('ntfy');
         $server = rtrim($config['server'], '/');
 
-        $logger->pushHandler(new class($server, $config['topic'], $config['level']) extends AbstractProcessingHandler
+        $handler = new class($server, $config['topic'], $config['level']) extends AbstractProcessingHandler
         {
             public function __construct(
                 private readonly string $server,
@@ -96,7 +96,12 @@ final class NtfyLogChannel
                     default => 'large_blue_circle',
                 };
             }
-        });
+        };
+
+        $deduplicationHandler = new DeduplicationHandler($handler, time: $config['deduplication_time'] ?? 60);
+
+        $logger = new Logger('ntfy');
+        $logger->pushHandler($deduplicationHandler);
 
         return $logger;
     }
