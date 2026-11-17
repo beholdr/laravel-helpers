@@ -15,7 +15,7 @@ class Redirect
      *
      * @param  Closure(Request): (Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $address): Response
+    public function handle(Request $request, Closure $next, string $address, int $status = Response::HTTP_MOVED_PERMANENTLY): Response
     {
         $isUrl = Str::isUrl($address) || Str::startsWith($address, '/');
         $url = $isUrl ? $address : route($address);
@@ -24,6 +24,6 @@ class Redirect
             $url .= '?'.Arr::query($request->query());
         }
 
-        return redirect($url, Response::HTTP_MOVED_PERMANENTLY);
+        return redirect($url, $status);
     }
 }
