@@ -55,6 +55,9 @@ middleware(['redirect:route.cards.unistream']);
 // OR redirect by URL
 middleware(['redirect:/']);
 
+// OR redirect by URL with a custom status code (302 instead of the default 301)
+middleware(['redirect:/,302']);
+
 ?>
 ```
 
@@ -85,6 +88,9 @@ middleware(['redirectUnlessConfig:custom.features.feature_xxx_enabled,route.card
 
 // OR redirect by URL if `custom.features.feature_xxx_enabled` not set
 middleware(['redirectUnlessConfig:custom.features.feature_xxx_enabled,/']);
+
+// OR redirect by URL with a custom status code (302 instead of the default 301)
+middleware(['redirectUnlessConfig:custom.features.feature_xxx_enabled,/,302']);
 
 ?>
 ```

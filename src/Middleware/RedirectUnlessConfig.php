@@ -13,12 +13,12 @@ class RedirectUnlessConfig
      *
      * @param  Closure(Request): (Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $configOption, string $address): Response
+    public function handle(Request $request, Closure $next, string $configOption, string $address, int $status = Response::HTTP_MOVED_PERMANENTLY): Response
     {
         if (config($configOption)) {
             return $next($request);
         }
 
-        return app(Redirect::class)->handle($request, fn ($request) => $next($request), $address);
+        return app(Redirect::class)->handle($request, fn ($request) => $next($request), $address, $status);
     }
 }
